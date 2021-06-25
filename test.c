@@ -27,7 +27,11 @@ void test_thread_pool_sanity()
 
 int main()
 {
-   test_thread_pool_sanity();
+//    void (*fun_ptr)(int) = &hello;
+//    void (*fun_ptr2)(int) = &hello;
+//    void* p = &fun_ptr;
+
+    test_thread_pool_sanity();
 
    return 0;
 }

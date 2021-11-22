@@ -1,4 +1,4 @@
-//Yair Yariv Yardeni 315009969
+//Yair Yariv Yardeni
 #include "threadPool.h"
 
 /*

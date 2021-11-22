@@ -1,4 +1,4 @@
-//Yair Yariv Yardeni 315009969
+//Yair Yariv Yardeni
 #ifndef __THREAD_POOL__
 #define __THREAD_POOL__
 

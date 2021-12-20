@@ -13,7 +13,7 @@ void runTask(Task* task){
  * Create a new Task from given function and parameter.
 */
 Task* createTask(taskFunc computeFunc, void* parameter){
-    Task *newTask = malloc(sizeof(Task)); //TODO: release this.
+    Task *newTask = malloc(sizeof(Task));
     if(newTask == NULL){
         perror(SYSTEM_CALL_ERROR);
         exit(-1);

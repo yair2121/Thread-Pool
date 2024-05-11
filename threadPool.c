@@ -1,17 +1,11 @@
 //Yair Yariv Yardeni
 #include "threadPool.h"
 
-/*
- * Run given task with it's parameters.
- */
 void runTask(Task* task){
     task->task(task->parameter);
     free(task);
 }
 
-/*
- * Create a new Task from given function and parameter.
-*/
 Task* createTask(taskFunc computeFunc, void* parameter){
     Task *newTask = malloc(sizeof(Task));
     if(newTask == NULL){
@@ -24,7 +18,7 @@ Task* createTask(taskFunc computeFunc, void* parameter){
 }
 
 /*
- * This function is used as a Task for a thread to commit suicide.
+ * This function is used as a Task for a thread to destroy itself.
 */
 void ThreadSuicideTask(void *args) {
     ThreadPool *threadPool = (ThreadPool *) args;
@@ -33,9 +27,9 @@ void ThreadSuicideTask(void *args) {
 }
 
 /*
- * This function is used as a Task for a thread to run his owner thread pool tasks
- * args is owner thread pool.
-*/
+ * This function is used as a task for a thread to execute tasks from its owner thread pool.
+ * The 'args' parameter represents the owner thread pool.
+ */
 _Noreturn void startThread(void *args) {
     ThreadPool *threadPool = (ThreadPool *) args;
     Task *task;
@@ -107,8 +101,8 @@ ThreadPool *tpCreate(int numOfThreads) {
 }
 
 /*
- * Make this thread to wait threads of given thread pool to finish their tasks.
-*/
+ * This function causes the current thread to wait for the threads in the specified thread pool to finish their tasks.
+ */
 void joinThreads(ThreadPool* threadPool){
     int threadIndex;
     for(threadIndex = 0; threadIndex < threadPool->pool_size; ++threadIndex){
@@ -123,7 +117,7 @@ void emptyQueue(OSQueue* queue){
 }
 
 /*
- * Insert to the thread pool the thread suicide task for each thread in the pool.
+ * Insert to the thread pool the "self-destroy" task for each thread in the pool.
 */
 void destroyThreads(ThreadPool* threadPool){
     int poolIndex;
@@ -132,9 +126,6 @@ void destroyThreads(ThreadPool* threadPool){
     }
 }
 
-/*
- * Start thread pool self destroying sequence.
-*/
 void tpDestroy(ThreadPool *threadPool, int shouldWaitForTasks) {
     if (threadPool->state < DESTROYING) {
         threadPool->state = DESTROYING;
@@ -148,7 +139,7 @@ void tpDestroy(ThreadPool *threadPool, int shouldWaitForTasks) {
         pthread_mutex_unlock(&threadPool->queueLock);
         //End Critical Section
 
-        pthread_cond_signal(&threadPool->queueCondition); // Start threads suicide sequence.
+        pthread_cond_signal(&threadPool->queueCondition); // Start thread pool self destroying sequence.
         while (osIsQueueEmpty(threadPool->taskQueue) == FALSE){
             pthread_cond_wait(&threadPool->queueCondition, &threadPool->queueLock);
         }

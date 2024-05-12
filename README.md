@@ -1,4 +1,4 @@
-## Thread Pool Implementation in C
+## Thread Pool (using pthreads) implementation in C
 ## Overview
 This thread pool implementation provides a simple and efficient way to manage a pool of worker threads for executing tasks concurrently.
 
